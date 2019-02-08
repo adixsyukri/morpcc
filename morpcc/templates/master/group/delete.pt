@@ -1,0 +1,134 @@
+<html metal:use-macro="load_template('master/page.pt').macros.master">
+
+    <body>
+        <span metal:fill-slot="page-title">
+      Group Info
+        </span>
+        <div metal:fill-slot="page-body" class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>Are you sure you want to delete this?</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li>
+                            <a tal:attributes="href request.link(context, '+%s' % context.default_view)">
+                                <i class="fa fa-eye"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a tal:attributes="href request.link(context, '+edit')" tal:condition="permits('morpfw.crud.permission:Edit')">
+                                <i class="fa fa-edit"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a tal:attributes="href request.link(context, '+delete')" tal:condition="permits('morpfw.crud.permission:Delete')">
+                                <i class="fa fa-trash"></i>
+                            </a>
+                        </li>
+                        <li class="dropdown" tal:define="transitions transitions|None" tal:condition="transitions and permits('morpfw.crud.permission:Edit')">
+
+                            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                <i class="fa fa-cogs"></i>
+                            </a>
+
+                            <ul role="menu" class="dropdown-menu">
+                                <li tal:repeat="transition transitions" onclick="$('#transition-value').val('${transition}');$('#transition-form').submit();">
+                                    <a>${transition}</a>
+                                </li>
+                            </ul>
+                            <form id="transition-form" method="POST" tal:attributes="action request.link(context, '+statemachine')" style="display: none">
+                                <input id="transition-value" type="hidden" name="transition" value="" />
+                            </form>
+                        </li>
+                        <li>
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+
+                    <div class="col-xs-3">
+                        <!-- required for floating -->
+                        <!-- Nav tabs -->
+                        <ul class="nav nav-tabs tabs-left">
+                            <li class="active">
+                                <a href="#general" data-toggle="tab">General</a>
+                            </li>
+                            <li>
+                                <a href="#blobs" data-toggle="tab">Blobs</a>
+                            </li>
+                            <li>
+                                <a href="#xattrs" data-toggle="tab">Xattrs</a>
+                            </li>
+                            <li>
+                                <a href="#member" data-toggle="tab">Member</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="col-xs-9">
+                        <!-- Tab panes -->
+                        <div class="tab-content">
+
+                            <div class="tab-pane active" id="general">
+                                <p class="lead">General Info</p>
+                                <table class="table table-hover">
+                                    <tbody>
+                                        <tr>
+                                            <th style="width: 20%" scope="row">Name</th>
+                                            <td>${context.model.data.groupname}</td>
+                                        </tr>
+                                        <tr>
+                                            <th style="width: 20%" scope="row">Id</th>
+                                            <td>${context.model.data.id}</td>
+                                        </tr>
+                                        <tr>
+                                            <th style="width: 20%" scope="row">Uuid</th>
+                                            <td>${context.model.data.uuid}</td>
+                                        </tr>
+                                        <tr>
+                                            <th style="width: 20%" scope="row">Creator</th>
+                                            <td>${context.model.data.creator}</td>
+                                        </tr>
+                                        <tr>
+                                            <th style="width: 20%" scope="row">Created</th>
+                                            <td>${context.model.data.created}</td>
+                                        </tr>
+                                        <tr>
+                                            <th style="width: 20%" scope="row">Deleted</th>
+                                            <td>${context.model.data.deleted}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="tab-pane" id="member">
+                                <p class="lead">Member Info</p>
+                            </div>
+                            <div class="tab-pane" id="blobs">
+                                <p class="lead">Blobs Info</p>
+                            </div>
+                            <div class="tab-pane" id="xattrs">
+                                <p class="lead">Xattrs Info</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="clearfix"></div>
+
+                </div>
+            </div>
+            <div class="ln_solid"></div>
+            <form method="POST" tal:attributes="action request.url">
+                <div class="form-group deform-form-buttons">
+                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                        <button name="delete" id="delete-button" class="btn btn-danger" value="Delete">Delete!</button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </body>
+
+</html>

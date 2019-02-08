@@ -24,7 +24,7 @@ def view(context, request):
         include_fields=context.view_include_fields,
         exclude_fields=context.view_exclude_fields)
     data = context.model.data.as_dict()
-    sm = context.model.state_machine()
+    sm = context.model.statemachine()
     if sm:
         triggers = [i for i in sm._machine.get_triggers(
             sm.state) if not i.startswith('to_')]
@@ -43,7 +43,7 @@ def view(context, request):
 @App.view(model=ModelUI, name='statemachine', permission=crudperms.Edit, request_method='POST')
 def statemachine(context, request):
     transition = request.POST.get('transition', None)
-    sm = context.model.state_machine()
+    sm = context.model.statemachine()
     if transition:
         attr = getattr(sm, transition, None)
         if attr:

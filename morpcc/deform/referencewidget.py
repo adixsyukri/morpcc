@@ -37,7 +37,8 @@ class ReferenceWidget(SelectWidget):
     def get_resource(self, request, identifier):
         typeinfo = request.app.config.type_registry.get_typeinfo(
             name=self.resource_type, request=request)
-        if not (identifier or '').strip():
+        # Fixme: should not handle string None
+        if not (identifier or '').strip() or identifier == 'None':
             return None
         m = typeinfo['model_ui_factory'](request, identifier)
         return m
@@ -55,7 +56,8 @@ class UserReferenceWidget(ReferenceWidget):
         super().__init__(resource_type, term_field, value_field, **kwargs)
 
     def get_resource(self, request, identifier):
-        if not identifier:
+        # Fixme: should not handle string None
+        if not identifier or identifier == 'None':
             return None
         newreq = request.get_authn_request()
         users = get_user_collection(newreq)

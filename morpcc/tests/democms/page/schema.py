@@ -10,3 +10,4 @@ class PageSchema(morpfw.Schema):
     description: typing.Optional[str] = None
     location: typing.Optional[str] = None
     body: typing.Optional[str] = None
+    form_date: typing.Optional[str] = None

@@ -13,6 +13,7 @@ class Page(morpfw.sql.Base):
     description = sa.Column(sa.Text())
     location = sa.Column(sa.String(length=2048))
     body = sa.Column(sa.Text())
+    form_date = sa.Column(sa.String())
 
 
 class PageStorage(morpfw.SQLStorage):

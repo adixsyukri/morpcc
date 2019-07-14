@@ -1,51 +1,64 @@
 <!DOCTYPE html>
 
 <html>
-    <metal:master use-macro="load_template('master/page.pt').macros.master">
-        <body>
-            <h3>
-                <span metal:fill-slot="page-title">
-                ${page_title|'Page Title'}
-                </span>
-            </h3>
-            <div metal:fill-slot="page-body" class="row">
-                <div class="col-md-12 col-sm-12 col-xs-12">
-                    <div metal:use-macro="load_template('master/panel.pt').macros.panel">
-                        <h2 metal:fill-slot="panel-title">${listing_title}</h2>
-                        <div metal:fill-slot="panel-content">
+<metal:master use-macro="load_template('master/page.pt').macros.master">
 
-                            <table id="content-listing" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
-                                <thead>
-                                    <tr>
-                                        <th tal:repeat="c columns" tal:content="c"></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
-                            <div>
-                                <a tal:attributes="href request.link(context, '+create')">
-                                    <button class="btn btn-primary">
-                                        <i class="fa fa-plus"></i> Add</button>
-                                </a>
-                            </div>
-                        </div>
+    <body>
+        <h3>
+            <span metal:fill-slot="page-title">
+                ${page_title|'Page Title'}
+            </span>
+        </h3>
+        <div metal:fill-slot="page-body" class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div metal:use-macro="load_template('master/panel.pt').macros.panel">
+                    <h2 metal:fill-slot="panel-title">${listing_title}</h2>
+                    <div metal:fill-slot="panel-content">
+
+                        <table id="content-listing" class="table table-striped table-bordered dt-responsive nowrap"
+                            cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th tal:repeat="c columns" tal:content="c"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                        <a tal:attributes="href request.link(context, '+create')">
+                            <button class="btn btn-primary">
+                                <i class="fa fa-plus"></i> Add</button>
+                        </a>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <metal:slot fill-slot="footer_script_slot">
-                <script>
-            $(document).ready(function () {
-                $('#content-listing').DataTable({
-                    serverSide: true,
-                    processing: true,
-                    ajax: "${request.link(context, '+datatable.json')}",
-                    columns: ${column_options}
+        <metal:slot fill-slot="footer_script_slot">
+            <script>
+                $(document).ready(function () {
+                    var oTable = $('#content-listing').dataTable({
+                        serverSide: true,
+                        processing: true,
+                        ajax: "${request.link(context, '+datatable.json')}",
+                        columns: ${ column_options },
+                        "bPaginate": true,
+                        "bLengthChange": true,
+                        "bFilter": true,
+                        "bSort": true,
+                        "bInfo": true,
+                        "bAutoWidth": true
+                });
+                $('#content-listing_filter input').unbind();
+                $('#content-listing_filter input').bind('keyup', function (e) {
+                    if (e.keyCode == 13) {
+                        oTable.fnFilter(this.value);
+                    }
                 });
             })
-                </script>
-            </metal:slot>
-        </body>
-    </metal:master>
+            </script>
+        </metal:slot>
+    </body>
+</metal:master>
+
 </html>

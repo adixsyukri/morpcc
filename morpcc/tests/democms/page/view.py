@@ -1,6 +1,7 @@
 from ..app import App
 from .modelui import PageModelUI, PageCollectionUI
 import rulez
+from rulez import and_, or_
 import morepath
 import html
 import deform
@@ -42,7 +43,7 @@ def process_create(context, request):
     if not failed:
         today = date.today().isoformat()
         pagecol = context.collection
-        objs = pagecol.search(query=rulez.field['form_date'] == 'not today date' and rulez.field['creator'] == request.identity.userid) # should not return results
+        objs = pagecol.search(query=or_(rulez.field['form_date'] == today, rulez.field['creator'] == request.identity.userid)) # should return result if any
         if objs:
             failed = True
             return {
